@@ -15,3 +15,37 @@ gh-jack -e "skarakayali@gmail.com" -n "Selçuk Karakayalı" -t invader_2 -p "201
 gh-jack -e "skarakayali@gmail.com" -n "Selçuk Karakayalı" -t invader_1 -p "2017-06-18" 
 
 gh-jack -e "skarakayali@gmail.com" -n "Selçuk Karakayalı" -t invader_4 -p "2017-09-03" 
+
+!#/bin/bash
+
+fd=$(date -d "$(date -d "2016/1/1")")
+days_to_roll=$((7 - $(date +%w -d "${fd}")))
+start=$(date -d "$fd ${days_to_roll} days")
+
+for i in {0..8}; do
+  echo "invading for date $start"
+  gh-jack \
+    --email "skarakayali@gmail.com" \
+    --name "Selçuk Karakayalı" \
+    --force \
+    --keep \
+    --repository "${HOME}/workspace/jack" \
+    --position "${start}" \
+    --shade 1 \
+    --template "invader_$(( ${RANDOM} % 5 + 1 ))" \
+    --write jack
+  
+  start=$(date -d "$start +11 weeks")
+done
+
+cron-job every day:
+  gh-jack \
+    --email "skarakayali@gmail.com" \
+    --name "Selçuk Karakayalı" \
+    --force \
+    --repository "${REPOSITORY}" \
+    --position last \
+    --keep \
+    --shade 2 \
+    --template meander_2 \
+    --write jack
