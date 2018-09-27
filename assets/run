@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+fd=$(date -d "$(date -d "2016/1/1")")
+days_to_roll=$((7 - $(date +%w -d "${fd}")))
+start=$(date -d "$fd ${days_to_roll} days")
+
+GHJ="${HOME}/workspace/github-jack"
+
+for i in {0..8}; do
+  TEMP="invader_$(( ${RANDOM} % 5 + 1 ))"
+  TEMP_COLS=$( wc --max-line-length < "${GHJ}/templates/invaders/${TEMP}".tpl )
+  echo "invading ${TEMP}(${TEMP_COLS}) for date $start"
+  ${GHJ}/gh-jack \
+    --email "skarakayali@gmail.com" \
+    --name "Selçuk Karakayalı" \
+    --force \
+    --keep \
+    --repository "${HOME}/workspace/jack" \
+    --position "${start}" \
+    --shade 1 \
+    --template "${TEMP}" \
+    --write jack
+  
+  start=$(date -d "$start +${TEMP_COLS} weeks")
+done
