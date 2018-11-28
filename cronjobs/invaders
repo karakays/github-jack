@@ -7,7 +7,7 @@
 #
 # Example cronjob to generate invaders board
 
-REPOSITORY='/home/jack/jack-board'
+REPOSITORY='/home/karakays/workspace/jack'
 
 is_board_full() {
   local last_author_timestamp=$(
@@ -32,13 +32,17 @@ is_board_full() {
 }
 
 while ! is_board_full; do
-  gh-jack \
+  ./gh-jack \
     --force \
+    --email "skarakayali@gmail.com" \
+    --name "Selçuk Karakayalı" \
     --repository "${REPOSITORY}" \
     --position last \
     --keep \
     --template "invader_$(( ${RANDOM} % 5 + 1 ))" \
-    --message "Invading..."
+    --shade 2 \
+    --write jack \
+    --verbose
 done
 
 git \
@@ -46,6 +50,7 @@ git \
   --work-tree "${REPOSITORY}" \
   push \
   --force \
-  --quiet
+  --quiet \
+  origin master
 
 exit 0
